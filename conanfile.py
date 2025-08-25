@@ -1,0 +1,96 @@
+import os
+
+from conan import ConanFile
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.build import check_min_cppstd
+from conan.tools.files import copy
+
+
+def _make_component_name(name):
+    return f"ka_{name}"
+
+
+def _make_target_name(name):
+    return f"ka::{name}"
+
+
+class KaSubiconRecipe(ConanFile):
+    name = "ka_subicon"
+    version = "0.1.0"
+
+    license = "MIT"
+    author = "kononovarseniy@gmail.com"
+    url = "https://github.com/kononovarseniy/ka_subicon"
+
+    settings = "os", "compiler", "build_type", "arch"
+
+    options = {
+        "build_tests": [True, False],
+    }
+
+    default_options = {
+        "build_tests": True,
+    }
+
+    def export_sources(self):
+        copy(self, "CMakeLists.txt", self.recipe_folder, self.export_sources_folder)
+        copy(self, "src/*", self.recipe_folder, self.export_sources_folder)
+
+    def requirements(self):
+        self.requires("fmt/9.1.0")
+        self.requires("pugixml/1.15")
+
+        if self.options.build_tests:
+            self.test_requires("gtest/1.15.0")
+
+    def validate(self):
+        check_min_cppstd(self, "20")
+
+    def layout(self):
+        cmake_layout(self)
+
+        def component_layout(name, path=None):
+            component_name = _make_component_name(name)
+            if path is None:
+                path = ["src", name]
+            # Configuration for editatable package.
+            self.cpp.source.components[component_name].includedirs = [os.path.join(*path, "include")]
+            self.cpp.build.components[component_name].libdirs = [os.path.join(*path)]
+
+        component_layout("subicon")
+
+    def generate(self):
+        deps = CMakeDeps(self)
+        deps.generate()
+        toolchain = CMakeToolchain(self)
+        toolchain.variables["BUILD_TESTS"] = bool(self.options.build_tests)
+        toolchain.generate()
+
+    def build(self):
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build()
+        if self.options.build_tests:
+            cmake.ctest(cli_args=["--output-on-failure"])
+
+    def package(self):
+        cmake = CMake(self)
+        cmake.install()
+
+    def package_info(self):
+        def component_info(name, kind, requires=[]):
+            component = self.cpp_info.components[_make_component_name(name)]
+            component.requires = list(map(_make_component_name, requires))
+            component.set_property("cmake_target_name", _make_target_name(name))
+
+            if kind == "header":
+                component.bindirs = []
+                component.libdirs = []
+            elif kind == "lib":
+                component.libs = [_make_component_name(name)]
+            elif kind == "bin":
+                pass
+            else:
+                assert False
+
+        component_info("subicon", kind="lib")

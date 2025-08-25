@@ -1,0 +1,134 @@
+BasedOnStyle: Microsoft
+ColumnLimit: 120
+
+Language: Cpp
+Standard: c++20
+
+IndentWidth: 4
+ContinuationIndentWidth: 4
+
+IndentAccessModifiers: False
+AccessModifierOffset: -4
+IndentCaseLabels: False
+IndentExternBlock: NoIndent
+IndentGotoLabels: False
+IndentPPDirectives: BeforeHash
+IndentWrappedFunctionNames: False
+LambdaBodyIndentation: Signature
+NamespaceIndentation: None
+PenaltyReturnTypeOnItsOwnLine: 100000
+# Improve chained method calls
+PenaltyIndentedWhitespace: 30
+
+InsertTrailingCommas: Wrapped
+
+AlwaysBreakTemplateDeclarations: Yes
+
+SeparateDefinitionBlocks: Always
+EmptyLineAfterAccessModifier: Never
+EmptyLineBeforeAccessModifier: Always
+KeepEmptyLinesAtTheStartOfBlocks: False
+MaxEmptyLinesToKeep: 1
+
+IncludeBlocks: Regroup
+IncludeCategories:
+  # gtest includes
+  - Regex: '<gtest/.+>'
+    Priority: 0
+    SortPriority: 1
+  - Regex: '<gmock/.+>'
+    Priority: 0
+    SortPriority: 2
+  # Graphics API includes
+  - Regex: "<vulkan/.+>"
+    Priority: 1
+    SortPriority: 1
+    CaseSensitive: True
+  - Regex: "<GLFW/glfw3.h>"
+    Priority: 1
+    SortPriority: 2
+    CaseSensitive: True
+  # mpfr includes
+  - Regex: '<mpfr\.h>'
+    Priority: 8
+  # pugixml includes
+  - Regex: '<pugixml\.hpp>'
+    Priority: 9
+  # spirv_cross includes
+  - Regex: '<spirv_cross/.+>'
+    Priority: 10
+  # stb_image includes
+  - Regex: '<stb_image\.h>'
+    Priority: 11
+  # tiny_gltf includes
+  - Regex: '<tiny_gltf\.h>'
+    Priority: 12
+  # stl includes
+  - Regex: "<[[:alnum:]_.]+>"
+    Priority: 3
+  # boost includes
+  - Regex: "<boost/.+>"
+    Priority: 4
+  # fmt includes
+  - Regex: "<fmt/.+>"
+    Priority: 5
+  # glm includes
+  - Regex: "<glm/.+>"
+    Priority: 6
+  # gsl includes
+  - Regex: "<gsl/.+>"
+    Priority: 7
+  # Our includes
+  - Regex: '<[[:alnum:]_/]+\.(hpp|pb.h)>'
+    Priority: 100
+    CaseSensitive: True
+  # Others
+  - Regex: ".*"
+    Priority: 1000
+
+# Arguments and parameters
+AlignAfterOpenBracket: AlwaysBreak
+BinPackArguments: False
+BinPackParameters: OnePerLine
+AllowAllArgumentsOnNextLine: False
+AllowAllParametersOfDeclarationOnNextLine: False
+
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Empty
+AllowShortLoopsOnASingleLine: false
+
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: True
+BreakInheritanceList: BeforeComma
+
+PackConstructorInitializers: Never
+BreakConstructorInitializers: BeforeComma
+
+SpaceAfterTemplateKeyword: True
+SpaceBeforeAssignmentOperators: True
+SpaceBeforeCaseColon: False
+SpaceBeforeCpp11BracedList: True
+Cpp11BracedListStyle: False
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: True
+SpaceBeforeSquareBrackets: False
+SpaceInEmptyBlock: False
+SpaceInEmptyParentheses: False
+
+FixNamespaceComments: True
+ShortNamespaceLines: 0
+
+PointerAlignment: Middle
+SpaceAroundPointerQualifiers: Both
+
+ReflowComments: Always
+
+---
+Language: Proto
+BasedOnStyle: google
+IndentWidth: 4
+ColumnLimit: 80
