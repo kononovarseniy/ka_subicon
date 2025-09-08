@@ -9,17 +9,24 @@ target_sources(ka_${module_name}
     BASE_DIRS include
     FILES
         include/ka/subicon/subicon.hpp
+        include/ka/subicon/svg.hpp
 
     PRIVATE
         src/subicon.cpp
+        src/svg.cpp
 )
 
 # target_enable_warnings(ka_${module_name})
 
-# target_link_libraries(ka_${module_name}
-#     PUBLIC
-#         ka::common
-# )
+find_package(fmt REQUIRED)
+find_package(pugixml REQUIRED)
+
+target_link_libraries(ka_${module_name}
+    PUBLIC
+        # ka::common
+        fmt::fmt
+        pugixml::pugixml
+)
 
 install(TARGETS ka_${module_name}
     ARCHIVE DESTINATION lib
@@ -32,7 +39,9 @@ if(BUILD_TESTS)
     find_package(fmt REQUIRED)
 
     add_executable(ka_${module_name}_test
-        test/test.cpp
+        test/load_xml.cpp
+        test/load_xml.hpp
+        test/test_svg_intrinsic_size.cpp
     )
     # target_enable_warnings(ka_${module_name}_test)
     target_link_libraries(ka_${module_name}_test
