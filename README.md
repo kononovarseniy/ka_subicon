@@ -1,4 +1,4 @@
-# ka_subicon
+# ka::subicon
 
 Compose and modify SVG icons.
 
